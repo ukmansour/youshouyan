@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>유수언 - 배경 통합형 플레이어</title>
+    <style>
+        body, html {
+            margin: 0; padding: 0; font-family: 'Malgun Gothic', sans-serif;
+            min-height: 100vh;
+            background-image: url('스크린샷 2026-02-23 170942.jpg'); 
+            background-attachment: fixed; background-position: center;
+            background-repeat: no-repeat; background-size: cover;
+        }
+        .full-overlay {
+            min-height: 100vh; background-color: rgba(255, 255, 255, 0.5); 
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .top-logo-container { width: 100%; text-align: center; padding: 40px 0; }
+        .top-logo { max-width: 300px; height: auto; }
+        .player-section {
+            width: 90%; max-width: 800px; position: sticky; top: 10px; z-index: 100;
+            background: rgba(255, 255, 255, 0.8); padding: 15px; border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); margin-bottom: 20px;
+        }
+        video { width: 100%; border-radius: 10px; background: #000; }
+        #currentTitle { margin: 10px 0 0 0; text-align: center; color: #333; }
+        .list-section { width: 90%; max-width: 600px; padding-bottom: 50px; }
+        .season-box { 
+            border: 2px solid #333; padding: 10px; margin: 30px 0 10px; 
+            font-weight: bold; text-align: center; background: rgba(238, 238, 238, 0.9); 
+            border-radius: 5px;
+        }
+        .episode-btn { 
+            display: flex; justify-content: space-between; padding: 15px; 
+            border-bottom: 1px solid rgba(0,0,0,0.1); cursor: pointer; 
+            background: rgba(255, 255, 255, 0.6); margin-bottom: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="full-overlay">
+        <div class="top-logo-container">
+            <img src="유수언 한자.webp" alt="한자로고" class="top-logo">
+        </div>
+        <div class="player-section">
+            <video id="mainPlayer" controls playsinline>
+                <source id="videoSource" src="" type="video/mp4">
+            </video>
+            <h3 id="currentTitle">화수를 선택해 주세요</h3>
+        </div>
+        <div id="contentList" class="list-section"></div>
+    </div>
+
+    <script>
+        const player = document.getElementById('mainPlayer');
+        const source = document.getElementById('videoSource');
+        const titleText = document.getElementById('currentTitle');
+        const contentList = document.getElementById('contentList');
+
+        const seasons = [
+            { name: "시즌 1", start: 1, end: 12 },
+            { name: "시즌 2", start: 13, end: 24 },
+            { name: "시즌 3", start: 25, end: 36 },
+            { name: "시즌 4", start: 37, end: 48 },
+            { name: "시즌 5", start: 49, end: 60 }
+        ];
+
+        seasons.forEach(s => {
+            let box = document.createElement('div');
+            box.className = 'season-box';
+            box.innerText = s.name;
+            contentList.appendChild(box);
+
+            for (let i = s.start; i <= s.end; i++) {
+                let item = document.createElement('div');
+                item.className = 'episode-btn';
+                item.innerHTML = `<span>${i}화</span>`;
+
+                item.onclick = function() {
+                    // 현재 도메인에서 바로 영상을 불러오도록 설정
+                    source.src = "./" + i + "화.mp4"; 
+                    titleText.innerText = i + "화 재생 준비 중...";
+                    player.load();
+                    player.play().catch(() => {
+                        titleText.innerText = i + "화 (파일 없음)";
+                    });
+                    window.scrollTo({top: document.querySelector('.player-section').offsetTop - 20, behavior: 'smooth'});
+                };
+                contentList.appendChild(item);
+            }
+        });
+    </script>
+</body>
+</html>
