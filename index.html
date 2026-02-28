@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>유수언 - 배경 통합형 플레이어</title>
+    <title>유수언 - 통합 플레이어</title>
     <style>
         body, html {
             margin: 0; padding: 0; font-family: 'Malgun Gothic', sans-serif;
             min-height: 100vh;
-            /* 배경 이미지 주소를 절대 경로로 수정 */
-            background-image: url('/스크린샷 2026-02-23 170942.jpg'); 
+            /* 배경 이미지: R2 전체 주소를 직접 입력 */
+            background-image: url('https://fabulousbeasts.kr/스크린샷 2026-02-23 170942.jpg'); 
             background-attachment: fixed; background-position: center;
             background-repeat: no-repeat; background-size: cover;
         }
@@ -42,10 +42,10 @@
 <body>
     <div class="full-overlay">
         <div class="top-logo-container">
-            <img src="/유수언 한자.webp" alt="한자로고" class="top-logo">
+            <img src="https://fabulousbeasts.kr/유수언 한자.webp" alt="한자로고" class="top-logo">
         </div>
         <div class="player-section">
-            <video id="mainPlayer" controls playsinline>
+            <video id="mainPlayer" controls playsinline preload="metadata">
                 <source id="videoSource" src="" type="video/mp4">
             </video>
             <h3 id="currentTitle">화수를 선택해 주세요</h3>
@@ -58,6 +58,9 @@
         const source = document.getElementById('videoSource');
         const titleText = document.getElementById('currentTitle');
         const contentList = document.getElementById('contentList');
+
+        // 내 R2의 실제 주소를 여기에 적으세요 (끝에 / 빼고)
+        const R2_URL = "https://fabulousbeasts.kr";
 
         const seasons = [
             { name: "시즌 1", start: 1, end: 12 },
@@ -79,12 +82,13 @@
                 item.innerHTML = `<span>${i}화</span>`;
 
                 item.onclick = function() {
-                    // 핵심 수정: 현재 도메인 루트(/)에서 영상을 가져오도록 변경
-                    // R2가 연결되면 fabulousbeasts.kr/1화.mp4 형태로 요청하게 됩니다.
-                    source.src = "/" + i + "화.mp4"; 
+                    // R2 주소와 파일명을 합쳐서 직접 연결
+                    const videoFullUrl = `${R2_URL}/${i}화.mp4`;
+                    source.src = videoFullUrl; 
                     titleText.innerText = i + "화 재생 중...";
+                    
                     player.load();
-                    player.play().catch(() => {
+                    player.play().catch(e => {
                         titleText.innerText = i + "화 (파일을 찾을 수 없습니다)";
                     });
                     window.scrollTo({top: document.querySelector('.player-section').offsetTop - 20, behavior: 'smooth'});
