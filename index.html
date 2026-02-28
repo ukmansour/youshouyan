@@ -8,7 +8,8 @@
         body, html {
             margin: 0; padding: 0; font-family: 'Malgun Gothic', sans-serif;
             min-height: 100vh;
-            background-image: url('스크린샷 2026-02-23 170942.jpg'); 
+            /* 배경 이미지 주소를 절대 경로로 수정 */
+            background-image: url('/스크린샷 2026-02-23 170942.jpg'); 
             background-attachment: fixed; background-position: center;
             background-repeat: no-repeat; background-size: cover;
         }
@@ -41,7 +42,7 @@
 <body>
     <div class="full-overlay">
         <div class="top-logo-container">
-            <img src="유수언 한자.webp" alt="한자로고" class="top-logo">
+            <img src="/유수언 한자.webp" alt="한자로고" class="top-logo">
         </div>
         <div class="player-section">
             <video id="mainPlayer" controls playsinline>
@@ -78,12 +79,13 @@
                 item.innerHTML = `<span>${i}화</span>`;
 
                 item.onclick = function() {
-                    // 현재 도메인에서 바로 영상을 불러오도록 설정
-                    source.src = "./" + i + "화.mp4"; 
-                    titleText.innerText = i + "화 재생 준비 중...";
+                    // 핵심 수정: 현재 도메인 루트(/)에서 영상을 가져오도록 변경
+                    // R2가 연결되면 fabulousbeasts.kr/1화.mp4 형태로 요청하게 됩니다.
+                    source.src = "/" + i + "화.mp4"; 
+                    titleText.innerText = i + "화 재생 중...";
                     player.load();
                     player.play().catch(() => {
-                        titleText.innerText = i + "화 (파일 없음)";
+                        titleText.innerText = i + "화 (파일을 찾을 수 없습니다)";
                     });
                     window.scrollTo({top: document.querySelector('.player-section').offsetTop - 20, behavior: 'smooth'});
                 };
