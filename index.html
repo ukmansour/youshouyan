@@ -8,8 +8,8 @@
         body, html {
             margin: 0; padding: 0; font-family: 'Malgun Gothic', sans-serif;
             min-height: 100vh;
-            /* 배경 이미지 주소 수정 */
-            background-image: url('https://media.fabulousbeasts.kr/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202026-02-23%20170942.jpg'); 
+            /* 변경된 파일명 bg.jpg 사용 */
+            background-image: url('https://media.fabulousbeasts.kr/bg.jpg'); 
             background-attachment: fixed; background-position: center;
             background-repeat: no-repeat; background-size: cover;
         }
@@ -27,22 +27,14 @@
         video { width: 100%; border-radius: 10px; background: #000; }
         #currentTitle { margin: 10px 0 0 0; text-align: center; color: #333; }
         .list-section { width: 90%; max-width: 600px; padding-bottom: 50px; }
-        .season-box { 
-            border: 2px solid #333; padding: 10px; margin: 30px 0 10px; 
-            font-weight: bold; text-align: center; background: rgba(238, 238, 238, 0.9); 
-            border-radius: 5px;
-        }
-        .episode-btn { 
-            display: flex; justify-content: space-between; padding: 15px; 
-            border-bottom: 1px solid rgba(0,0,0,0.1); cursor: pointer; 
-            background: rgba(255, 255, 255, 0.6); margin-bottom: 2px;
-        }
+        .season-box { border: 2px solid #333; padding: 10px; margin: 30px 0 10px; font-weight: bold; text-align: center; background: rgba(238, 238, 238, 0.9); border-radius: 5px; }
+        .episode-btn { display: flex; justify-content: space-between; padding: 15px; border-bottom: 1px solid rgba(0,0,0,0.1); cursor: pointer; background: rgba(255, 255, 255, 0.6); margin-bottom: 2px; }
     </style>
 </head>
 <body>
     <div class="full-overlay">
         <div class="top-logo-container">
-            <img src="https://media.fabulousbeasts.kr/%EC%9C%A0%EC%88%98%EC%96%B8%20%ED%95%9C%EC%9E%90.webp" alt="한자로고" class="top-logo">
+            <img src="https://media.fabulousbeasts.kr/logo.webp" alt="한자로고" class="top-logo">
         </div>
         <div class="player-section">
             <video id="mainPlayer" controls playsinline preload="metadata">
@@ -59,7 +51,7 @@
         const titleText = document.getElementById('currentTitle');
         const contentList = document.getElementById('contentList');
 
-        // [수정] 메인 도메인 충돌 방지를 위해 media 서브도메인 사용
+        // 영상 전용 주소 (media 서브도메인)
         const R2_URL = "https://media.fabulousbeasts.kr";
 
         const seasons = [
@@ -72,8 +64,7 @@
 
         seasons.forEach(s => {
             let box = document.createElement('div');
-            box.className = 'season-box';
-            box.innerText = s.name;
+            box.className = 'season-box'; box.innerText = s.name;
             contentList.appendChild(box);
 
             for (let i = s.start; i <= s.end; i++) {
@@ -82,18 +73,12 @@
                 item.innerHTML = `<span>${i}화</span>`;
 
                 item.onclick = function() {
-                    // [수정] 한글 파일명을 안전하게 변환 (1화.mp4 -> 1%ED%99%94.mp4)
-                    const fileName = encodeURIComponent(i + "화.mp4");
-                    const videoFullUrl = `${R2_URL}/${fileName}`;
-                    
+                    // 영상 파일명은 그대로 '1화.mp4'라고 가정 (인코딩 처리 포함)
+                    const videoFullUrl = `${R2_URL}/${encodeURIComponent(i + "화.mp4")}`;
                     source.src = videoFullUrl; 
                     titleText.innerText = i + "화 재생 중...";
-                    
                     player.load();
-                    player.play().catch(e => {
-                        console.error("재생 오류:", e);
-                        titleText.innerText = i + "화 (파일을 찾을 수 없습니다)";
-                    });
+                    player.play().catch(e => { titleText.innerText = i + "화 (파일 없음)"; });
                     window.scrollTo({top: document.querySelector('.player-section').offsetTop - 20, behavior: 'smooth'});
                 };
                 contentList.appendChild(item);
