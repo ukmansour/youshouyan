@@ -8,8 +8,8 @@
         body, html {
             margin: 0; padding: 0; font-family: 'Malgun Gothic', sans-serif;
             min-height: 100vh;
-            /* 배경 이미지: R2 전체 주소를 직접 입력 */
-            background-image: url('https://fabulousbeasts.kr/스크린샷 2026-02-23 170942.jpg'); 
+            /* 배경 이미지: media 서브도메인과 인코딩된 주소 사용 */
+            background-image: url('https://media.fabulousbeasts.kr/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202026-02-23%20170942.jpg'); 
             background-attachment: fixed; background-position: center;
             background-repeat: no-repeat; background-size: cover;
         }
@@ -42,7 +42,7 @@
 <body>
     <div class="full-overlay">
         <div class="top-logo-container">
-            <img src="https://fabulousbeasts.kr/유수언 한자.webp" alt="한자로고" class="top-logo">
+            <img src="https://media.fabulousbeasts.kr/%EC%9C%A0%EC%88%98%EC%96%B8%20%ED%95%9C%EC%9E%90.webp" alt="한자로고" class="top-logo">
         </div>
         <div class="player-section">
             <video id="mainPlayer" controls playsinline preload="metadata">
@@ -59,8 +59,8 @@
         const titleText = document.getElementById('currentTitle');
         const contentList = document.getElementById('contentList');
 
-        // 내 R2의 실제 주소를 여기에 적으세요 (끝에 / 빼고)
-        const R2_URL = "https://fabulousbeasts.kr";
+        // [수정됨] R2 전용 서브도메인 주소로 변경
+        const R2_URL = "https://media.fabulousbeasts.kr";
 
         const seasons = [
             { name: "시즌 1", start: 1, end: 12 },
@@ -82,8 +82,11 @@
                 item.innerHTML = `<span>${i}화</span>`;
 
                 item.onclick = function() {
-                    // R2 주소와 파일명을 합쳐서 직접 연결
-                    const videoFullUrl = `${R2_URL}/${i}화.mp4`;
+                    // [수정됨] 한글 파일명을 브라우저 주소용(UTF-8)으로 자동 변환
+                    // 예: "1화.mp4" -> "1%ED%99%94.mp4"
+                    const fileName = encodeURIComponent(i + "화.mp4");
+                    const videoFullUrl = `${R2_URL}/${fileName}`;
+                    
                     source.src = videoFullUrl; 
                     titleText.innerText = i + "화 재생 중...";
                     
