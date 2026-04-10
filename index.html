@@ -68,12 +68,15 @@
                 <source id="videoSource" src="" type="video/mp4">
             </video>
             <h3 id="currentTitle">화수를 선택해 주세요 
-(유수언 애니 번역해주실 분 모집합니다, 관심있으신 분들은 연락주세요!) https://open.kakao.com/o/sZFtOQKg</h3>
+</h3>
         </div>
        
         <div id="contentList" class="list-section">
             <div class="notice-text">
-                  
+                   공지<br>
+시험기간으로 인해 4월 24일부터 56화 번역하도록 하겠습니다<br>
+    (유수언 애니 번역해주실 분 모집합니다, 관심있으신 분들은 연락주세요!)<br>
+    https://open.kakao.com/o/sZFtOQKg
             </div>
         </div>
     </div>
@@ -129,11 +132,11 @@
                     const videoFullUrl = `${R2_URL}/${fileName}`;
                    
                     source.src = videoFullUrl;
-                    titleText.innerText = i + "화 재생 중...  (유수언 애니 번역해주실 분 모집합니다, 관심있으신 분들은 연락주세요!) https://open.kakao.com/o/sZFtOQKg ";
+                    titleText.innerText = i + "화 재생 중...  ";
                    
                     player.load();
                     player.play().catch(e => {
-                        titleText.innerText = i + "화 (파일이 없거나 불러올 수 없습니다) (유수언 애니 번역해주실 분 모집합니다, 관심있으신 분들은 연락주세요!) https://open.kakao.com/o/sZFtOQKg";
+                        titleText.innerText = i + "화 https://open.kakao.com/o/sZFtOQKg";
                     });
                     window.scrollTo({top: document.querySelector('.player-section').offsetTop - 20, behavior: 'smooth'});
                 };
